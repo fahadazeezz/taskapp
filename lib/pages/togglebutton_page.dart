@@ -15,6 +15,19 @@ class _TogglebuttonPageState extends State<TogglebuttonPage> {
 
   @override
   Widget build(BuildContext context) {
+    int enableCount = 0;
+    if (notification) {
+      enableCount++;
+    }
+    if (darkmode) {
+      enableCount++;
+    }
+    if (sound) {
+      enableCount++;
+    }
+    if (autoupdate) {
+      enableCount++;
+    }
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -65,6 +78,8 @@ class _TogglebuttonPageState extends State<TogglebuttonPage> {
                 },
               ),
               autoupdate ? Text("AutoUpdate On") : Text("AutoUpdate Off"),
+              const SizedBox(height: 20),
+              Text("Enabled Count:$enableCount"),
             ],
           ),
         ),
