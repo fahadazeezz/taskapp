@@ -10,6 +10,37 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   bool isFavorite = false;
 
+  int price = 1500;
+  int quantity = 1;
+  int deliveryFee = 50;
+
+  int calculatePrice() {
+    return price * quantity;
+  }
+
+  void increment() {
+    setState(() {
+      quantity++;
+      calculateTotal();
+    });
+  }
+
+  void decrement() {
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+        calculateTotal();
+      });
+    }
+  }
+
+  int calculateTotal() {
+    if (quantity == 0) {
+      return 0;
+    }
+    return calculatePrice() + deliveryFee;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +87,6 @@ class _CartPageState extends State<CartPage> {
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-
                       children: [
                         const SizedBox(height: 8),
                         Row(
@@ -91,6 +121,44 @@ class _CartPageState extends State<CartPage> {
                             color: Colors.grey[600],
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "${calculatePrice()}",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.lightBlue,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            IconButton.filledTonal(
+                              style: IconButton.styleFrom(
+                                backgroundColor: Color(0xFFE3EEFF),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  decrement();
+                                });
+                              },
+                              icon: Icon(Icons.remove),
+                            ),
+                            const SizedBox(width: 25),
+                            Text("$quantity", style: TextStyle(fontSize: 20)),
+                            const SizedBox(width: 25),
+                            IconButton.filled(
+                              style: IconButton.styleFrom(
+                                backgroundColor: Color(0xFF1976D2),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  increment();
+                                });
+                              },
+                              icon: Icon(Icons.add),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -123,6 +191,38 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 24),
+                    summeryRow("Quantity", "$quantity"),
+                    const SizedBox(height: 20),
+                    summeryRow("Price", "$price"),
+                    const SizedBox(height: 20),
+                    summeryRow("Delivery Fee", "$deliveryFee"),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Text(
+                            "Total",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xFF212121),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Text(
+                            "${calculateTotal()}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xFF1976D2),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -140,7 +240,7 @@ class _CartPageState extends State<CartPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    backgroundColor: const Color.fromARGB(255, 33, 13, 209),
+                    backgroundColor: Color(0xFF0D6EFD),
                   ),
                   onPressed: () {},
                   label: Text(
@@ -172,15 +272,12 @@ class _CartPageState extends State<CartPage> {
                   onPressed: () {},
                   icon: Icon(
                     Icons.delete_outlined,
-                    color: const Color.fromARGB(255, 5, 64, 111),
+                    color: Color(0xFF1976D2),
                     size: 28,
                   ),
                   label: Text(
                     'REMOVE ITEM',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: const Color.fromARGB(255, 5, 64, 111),
-                    ),
+                    style: TextStyle(fontSize: 18, color: Color(0xFF1976D2)),
                   ),
                 ),
               ),
@@ -192,10 +289,7 @@ class _CartPageState extends State<CartPage> {
               onPressed: () {},
               child: Text(
                 'Clear Cart',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: const Color.fromARGB(255, 5, 64, 111),
-                ),
+                style: TextStyle(fontSize: 16, color: Color(0xFF1976D2)),
               ),
             ),
             const SizedBox(height: 5),
@@ -207,7 +301,7 @@ class _CartPageState extends State<CartPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FloatingActionButton(
-                    backgroundColor: const Color.fromARGB(255, 33, 13, 209),
+                    backgroundColor: Color(0xFF1976D2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
@@ -226,4 +320,26 @@ class _CartPageState extends State<CartPage> {
       ),
     );
   }
+}
+
+Widget summeryRow(String title, String value) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Text(
+          title,
+          style: TextStyle(fontSize: 18, color: Color(0xFF757575)),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Text(
+          value,
+          style: TextStyle(fontSize: 18, color: Color(0xFF424242)),
+        ),
+      ),
+    ],
+  );
 }
